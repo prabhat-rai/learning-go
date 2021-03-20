@@ -1,0 +1,27 @@
+{{template "base" .}}
+{{define "title"}}Snippet #{{.Snippet.ID}}{{end}}
+{{define "main"}}
+<div class='snippet'>
+    {{with .Snippet}}
+    <div class='metadata'>
+        <strong>{{.Title}}</strong>
+        <span>#{{.ID}}</span>
+    </div>
+    <pre><code>{{.Content}}</code></pre>
+    <div class='metadata'>
+        <time>Created: {{.Created}}</time>
+        <time>Expires: {{.Expires}}</time>
+    </div>
+    {{end}}
+</div>
+{{end}}
+<!--kjd -->
+{{/*<span>{{.Snippet.Created.Weekday}}</span>*/}}
+{{/*<span>{{.Snippet.Created.AddDate 0 6 0}}</span>*/}}
+{{/*func noescape(str string) template.HTML {*/}}
+{{/*return template.HTML(str)*/}}
+{{/*}*/}}
+
+{{/*var fn = template.FuncMap{*/}}
+{{/*"noescape": noescape,*/}}
+{{/*}*/}}
