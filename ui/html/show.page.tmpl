@@ -4,13 +4,13 @@
 <div class='snippet'>
     {{with .Snippet}}
     <div class='metadata'>
-        <strong>{{.Title}}</strong>
+        <strong>{{noescape .Title}}</strong>
         <span>#{{.ID}}</span>
     </div>
     <pre><code>{{.Content}}</code></pre>
     <div class='metadata'>
-        <time>Created: {{.Created}}</time>
-        <time>Expires: {{.Expires}}</time>
+        <time>Created: {{humanDate .Created}} [{{.Created.Weekday}}]</time>
+        <time>{{.Expires | humanDate | printf "Expires: %s"}}</time>
     </div>
     {{end}}
 </div>
@@ -18,10 +18,3 @@
 <!--kjd -->
 {{/*<span>{{.Snippet.Created.Weekday}}</span>*/}}
 {{/*<span>{{.Snippet.Created.AddDate 0 6 0}}</span>*/}}
-{{/*func noescape(str string) template.HTML {*/}}
-{{/*return template.HTML(str)*/}}
-{{/*}*/}}
-
-{{/*var fn = template.FuncMap{*/}}
-{{/*"noescape": noescape,*/}}
-{{/*}*/}}
