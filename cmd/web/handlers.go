@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"prabhat-rai.in/snippetbox/pkg/models"
 	"strconv"
@@ -22,6 +21,12 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	app.render(w, r, "home.page.tmpl", &templateData{
+		Snippets: s,
+	})
+
+	// Below code is now replaced with new render helper.
+	/*
 	data := &templateData{Snippets: s}
 
 	//for _, snippet := range s {
@@ -56,6 +61,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.serverError(w, err) // Use the serverError() helper.
 	}
+	*/
 }
 
 func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
@@ -79,6 +85,12 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	app.render(w, r, "show.page.tmpl", &templateData{
+		Snippet: s,
+	})
+
+	// Below code is now replaced with new render helper.
+	/*
 	// Create an instance of a templateData struct holding the snippet data.
 	data := &templateData{Snippet: s}
 
@@ -106,6 +118,7 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.serverError(w, err)
 	}
+	*/
 }
 
 func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {

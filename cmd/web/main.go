@@ -72,6 +72,7 @@ func main() {
 		errorLog: errorLog,
 		infoLog:  infoLog,
 		snippets: &mysql.SnippetModel{DB: db},
+		templateCache: templateCache,
 	}
 
 	// Initialize a new http.Server struct. We set the Addr and Handler fields so
