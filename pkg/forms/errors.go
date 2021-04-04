@@ -15,3 +15,14 @@ func (e errors) Get(field string) string {
 	}
 	return es[0]
 }
+
+// Implement a GetAllErrors() method to retrieve all error messages
+func (e errors) GetAllErrors() [] string {
+	var errs []string
+
+	for i :=range e {
+		errs = append(errs, i + ":" + e[i][0])
+	}
+
+	return errs
+}

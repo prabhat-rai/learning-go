@@ -17,9 +17,13 @@ func (app *application) routes() http.Handler {
 	mux.Post("/snippet/create", http.HandlerFunc(app.createSnippet))
 	mux.Get("/snippet/:id", http.HandlerFunc(app.showSnippet))
 
+	apiMiddleware := standardMiddleware.Append(app.validateApiClient)
+	mux.Post("/api/snippet/add", apiMiddleware.ThenFunc(app.createSnippetFromApi))
+
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
 	mux.Get("/static/", http.StripPrefix("/static", fileServer))
 
 	return standardMiddleware.Then(mux)
 }
+

@@ -34,3 +34,19 @@ func (app *application) recoverPanic(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+func (app *application) validateApiClient(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		clientId 	 := r.Header.Get("client-id")
+		clientSecret := r.Header.Get("client-secret")
+
+		if clientId != "client-1" || clientSecret != "$ecret" {
+			app.errorLog.Printf("client-id and/or client-secret is not correct")
+			app.clientError(w, http.StatusBadRequest)
+			return
+		}
+
+
+		next.ServeHTTP(w, r)
+	})
+}
