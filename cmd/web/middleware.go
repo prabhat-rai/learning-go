@@ -64,6 +64,18 @@ func (app *application) requireAuthentication(next http.Handler) http.Handler {
 	})
 }
 
+func (app *application) onlyGuestUsers(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if app.isAuthenticated(r) {
+			app.session.Put(r, "flash", "Already logged in.")
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func noSurf(next http.Handler) http.Handler {
 	csrfHandler := nosurf.New(next)
 	csrfHandler.SetBaseCookie(http.Cookie{

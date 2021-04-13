@@ -17,10 +17,10 @@ func (app *application) routes() http.Handler {
 	mux.Get("/snippet/:id", dynamicMiddleware.ThenFunc(app.showSnippet))
 
 	// User Routes
-	mux.Get("/user/signup", dynamicMiddleware.ThenFunc(app.signupUserForm))
-	mux.Post("/user/signup", dynamicMiddleware.ThenFunc(app.signupUser))
-	mux.Get("/user/login", dynamicMiddleware.ThenFunc(app.loginUserForm))
-	mux.Post("/user/login", dynamicMiddleware.ThenFunc(app.loginUser))
+	mux.Get("/user/signup", dynamicMiddleware.Append(app.onlyGuestUsers).ThenFunc(app.signupUserForm))
+	mux.Post("/user/signup", dynamicMiddleware.Append(app.onlyGuestUsers).ThenFunc(app.signupUser))
+	mux.Get("/user/login", dynamicMiddleware.Append(app.onlyGuestUsers).ThenFunc(app.loginUserForm))
+	mux.Post("/user/login", dynamicMiddleware.Append(app.onlyGuestUsers).ThenFunc(app.loginUser))
 	mux.Post("/user/logout", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.logoutUser))
 
 
