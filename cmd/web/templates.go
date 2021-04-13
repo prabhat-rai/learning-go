@@ -25,7 +25,7 @@ func noescape(str string) template.HTML {
 
 var functions = template.FuncMap{
 	"humanDate": humanDate,
-	"noescape": noescape,
+	"noEscape": noescape,
 }
 
 func newTemplateCache(dir string) (map[string]*template.Template, error) {

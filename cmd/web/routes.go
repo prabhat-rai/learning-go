@@ -6,8 +6,6 @@ import (
 	"net/http"
 )
 
-
-
 func (app *application) routes() http.Handler {
 	standardMiddleware := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
 
@@ -19,6 +17,7 @@ func (app *application) routes() http.Handler {
 
 	apiMiddleware := standardMiddleware.Append(app.validateApiClient)
 	mux.Post("/api/snippet/add", apiMiddleware.ThenFunc(app.createSnippetFromApi))
+ 	//mux.Post("/api/snippet/add", apiMiddleware.Then(http.HandlerFunc(app.createSnippetFromApi)))
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
