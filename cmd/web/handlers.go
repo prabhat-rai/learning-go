@@ -99,7 +99,7 @@ func (app *application) createSnippetFromApi(w http.ResponseWriter, r *http.Requ
 	}
 
 	formValues, _ := query.Values(snippetRequest)
-	fmt.Printf("%#v", formValues)
+	// fmt.Printf("%#v", formValues)
 	form := forms.New(formValues)
 
 	if !validateCreateRequest(form, true) {
