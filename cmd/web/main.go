@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"prabhat-rai.in/snippetbox/pkg/models"
 	"prabhat-rai.in/snippetbox/pkg/models/mysql"
 	"time"
 
@@ -19,16 +20,27 @@ type contextKey string
 const contextKeyIsAuthenticated = contextKey("isAuthenticated")
 
 type application struct {
+	debug 		  bool
 	errorLog      *log.Logger
 	infoLog       *log.Logger
 	session		  *sessions.Session
-	snippets      *mysql.SnippetModel
+	snippets      interface {
+		Insert(string, string, string) (int, error)
+		Get(int) (*models.Snippet, error)
+		Latest() ([]*models.Snippet, error)
+	}
 	templateCache map[string]*template.Template
-	users		  *mysql.UserModel
+	users		  interface {
+		Insert(string, string, string) error
+		Authenticate(string, string) (int, error)
+		Get(int) (*models.User, error)
+		ChangePassword(int, string, string) error
+	}
 }
 
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
+	debug := flag.Bool("debug", false, "Enable debug mode")
 	dsn := flag.String("dsn", "web:pass@/snippetbox?parseTime=true", "MySQL data source name")
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "Secret key")
 	flag.Parse()
@@ -54,6 +66,7 @@ func main() {
 	session.Secure = true
 
 	app := &application{
+		debug:			*debug,
 		errorLog: 		errorLog,
 		infoLog:  		infoLog,
 		session: 		session,

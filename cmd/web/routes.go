@@ -12,6 +12,7 @@ func (app *application) routes() http.Handler {
 
 	mux := pat.New()
 	mux.Get("/", dynamicMiddleware.ThenFunc(app.home))
+	mux.Get("/about", dynamicMiddleware.ThenFunc(app.about))
 	mux.Get("/snippet/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createSnippetForm))
 	mux.Post("/snippet/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createSnippet))
 	mux.Get("/snippet/:id", dynamicMiddleware.ThenFunc(app.showSnippet))
@@ -22,7 +23,11 @@ func (app *application) routes() http.Handler {
 	mux.Get("/user/login", dynamicMiddleware.Append(app.onlyGuestUsers).ThenFunc(app.loginUserForm))
 	mux.Post("/user/login", dynamicMiddleware.Append(app.onlyGuestUsers).ThenFunc(app.loginUser))
 	mux.Post("/user/logout", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.logoutUser))
+	mux.Get("/user/profile", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.userProfile))
+	mux.Get("/user/change-password", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.changePasswordForm))
+	mux.Post("/user/change-password", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.changePassword))
 
+	mux.Get("/ping", http.HandlerFunc(ping))
 
 	apiMiddleware := alice.New(app.validateApiClient)
 	mux.Post("/api/snippet/add", apiMiddleware.ThenFunc(app.createSnippetFromApi))
